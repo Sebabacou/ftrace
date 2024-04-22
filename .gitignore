@@ -10,3 +10,4 @@ build
 ftrace
 *.txt
 .vscode
+.idea
