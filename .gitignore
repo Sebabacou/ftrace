@@ -11,4 +11,5 @@ ftrace
 *.txt
 .vscode
 .idea
+.idea/*
 test
