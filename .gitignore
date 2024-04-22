@@ -1,0 +1,12 @@
+*.a
+*.gcda
+*.gcno
+vgcore*
+*.o
+*~
+#*#
+coding-style-reports.log
+build
+ftrace
+*.txt
+.vscode
