@@ -48,7 +48,7 @@ jobs:
           fetch-depth: 0
       - name: Check compilation
         run: |
-          Make && Make fclean && Make re && Make clean
+          make && make fclean && make re && make clean
       - name: Check binary
         run: |
           if [ ! -f ${{ env.BINARIES }} ]; then
