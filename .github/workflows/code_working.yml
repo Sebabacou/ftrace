@@ -1,4 +1,4 @@
-name: Mirroring
+name: checking_compilation
 on:
   push:
     branches:

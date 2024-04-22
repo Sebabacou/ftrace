@@ -1,12 +1,8 @@
-name: checking
+name: checking_code_style
 on:
   push:
-    branches-ignore:
-      - main
-  pull_request:
-    types: [closed]
     branches:
-      - main
+      - '*'
 
 jobs:
   check_coding_style:
