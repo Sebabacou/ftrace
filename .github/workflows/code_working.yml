@@ -1,0 +1,45 @@
+name: checking_code_working
+on:
+  push:
+    branches:
+      - '*'
+
+env:
+  BINARIES:
+    ftrace
+  MIRROR_URL:
+    git@github:com:EpitechPromo2027/B-PSU-400-REN-4-1-ftrace-hugo.murat.git
+
+jobs:
+  check_compilation:
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker:latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Check compilation
+        run: |
+          make && make fclean && make re && make clean
+      - name: Check binary
+        run: |
+          if [ ! -f ${{ env.BINARIES }} ]; then
+            echo "Binary not found"
+            exit 1
+          fi
+
+  push_to_mirror:
+    if : github.event.pull_request.merge == true && github.event.pull_request.base.ref == 'main'
+    needs: check_compilation
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker:latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url:
+            ${{ env.MIRROR_URL }}
+          ssh_private_key:
+            ${{ secrets.GIT_SSH_PRIVATE_KEY }}
