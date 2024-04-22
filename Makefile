@@ -11,6 +11,7 @@ NAME		=	ftrace
 
 SRC			:= main.c
 SRC			+= ftrace.c
+SRC			+= symbole_finder.c
 # Utils
 SRC			+= exit.c
 SRC			+= help.c
@@ -67,7 +68,7 @@ $(BUILD_DIR)/%.o: %.c
 	@ $(ECHO) "$(C_GREEN)[OK]$(C_GREY) -> $<$(C_RESET)"
 
 $(NAME):	$(OBJ)
-	@ $(CC) -o $@ $^
+	@ $(CC) -o $@ $^ -lelf
 	@ $(ECHO) -n "$(C_PINK)|==========> $(NAME) compiled "
 	@ $(ECHO) "with $(NB_FILES) file(s). <==========|$(C_RESET)"
 
