@@ -1,0 +1,57 @@
+name: checking
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+env:
+  BINARIES:
+    ftrace
+
+jobs:
+  check_coding_style:
+    runs-on: ubuntu-latest
+    container: ghcr.io/epitech/coding-style-checker:latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: execute coding style checker
+        run: check.sh $(pwd) $(pwd)
+      - name: check coding style
+        run: |
+          bool_error=0
+          while read line; do
+            path=$(echo "$line" | cut -d: -f1)
+            fileLine=$(echo "$line" | cut -d: -f2)
+            type=$(echo "$line" | cut -d: -f3)
+            title=$(echo "$type coding style error")
+            error_num=$(echo "$line" | cut -d: -f4)
+            bool_error=1
+            echo "::error file=$path,line=$fileLine,title=$title::$error_num"
+          done < coding-style-reports.log
+          if [ $bool_error -eq 1 ]
+          then
+            exit 1
+          fi
+
+  check_compilation:
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker:latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Check compilation
+        run: |
+          Make && Make fclean && Make re && Make clean
+      - name: Check binary
+        run: |
+          if [ ! -f ${{ env.BINARIES }} ]; then
+            echo "Binary not found"
+            exit 1
+          fi
