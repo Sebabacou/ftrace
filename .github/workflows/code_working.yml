@@ -8,7 +8,7 @@ env:
   BINARIES:
     ftrace
   MIRROR_URL:
-    git@github:com:EpitechPromo2027/B-PSU-400-REN-4-1-ftrace-hugo.murat.git
+    git@github.com:EpitechPromo2027/B-PSU-400-REN-4-1-ftrace-hugo.murat.git
 
 jobs:
   check_compilation:
