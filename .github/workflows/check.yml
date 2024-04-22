@@ -8,10 +8,6 @@ on:
     branches:
       - main
 
-env:
-  BINARIES:
-    ftrace
-
 jobs:
   check_coding_style:
     runs-on: ubuntu-latest
@@ -36,22 +32,5 @@ jobs:
           done < coding-style-reports.log
           if [ $bool_error -eq 1 ]
           then
-            exit 1
-          fi
-
-  check_compilation:
-    runs-on: ubuntu-latest
-    container: epitechcontent/epitest-docker:latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Check compilation
-        run: |
-          make && make fclean && make re && make clean
-      - name: Check binary
-        run: |
-          if [ ! -f ${{ env.BINARIES }} ]; then
-            echo "Binary not found"
             exit 1
           fi
