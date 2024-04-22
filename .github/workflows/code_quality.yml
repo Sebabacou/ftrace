@@ -1,4 +1,4 @@
-name: checking_code_style
+name: checking_code_quality
 on:
   push:
     branches:

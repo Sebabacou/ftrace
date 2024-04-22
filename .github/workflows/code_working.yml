@@ -1,4 +1,4 @@
-name: checking_compilation
+name: checking_code_working
 on:
   push:
     branches:
