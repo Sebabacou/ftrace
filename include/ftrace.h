@@ -10,24 +10,6 @@
 #include "commons.h"
 
 /**
- * @brief Structure for the symbol finder.
- *
- * @param elf The elf file.
- * @param scn The section.
- * @param shdr The section header.
- * @param data The data.
- * @param sym The symbol.
- */
-
-typedef struct sym_finder_s {
-    Elf *elf;
-    Elf_Scn *scn;
-    GElf_Shdr shdr;
-    Elf_Data *data;
-    GElf_Sym sym;
-} sym_finder_t;
-
-/**
  * @brief Run the ftrace program.
  *
  * @param args Array of string containing
@@ -43,3 +25,13 @@ void run_ftrace(char **args);
  * @return true If the symbol is found.
  */
 bool find_symbol(char *filename, Elf64_Addr addr);
+
+/**
+ * @brief Parse the /proc/pid/maps file.
+ *
+ * @param pid The pid of the process.
+ * @param reg_offset The offset of the register.
+ * @param argv The arguments of the program.
+ * @return true If the parsing is successful.
+ */
+int my_trace(char *argv[], int pid);
