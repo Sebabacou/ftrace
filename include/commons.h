@@ -13,3 +13,8 @@
 #include <sys/ptrace.h>
 #include <unistd.h>
 #include <wait.h>
+#include <libelf.h>
+#include <gelf.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <stdbool.h>
