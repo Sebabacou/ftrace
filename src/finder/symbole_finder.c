@@ -65,6 +65,5 @@ int find_symbol(char *filename, Elf64_Addr addr)
             return true;
         scn = elf_nextscn(elf, scn);
     }
-    dprintf(2, "Symbol not found.\n");
     return false;
 }
