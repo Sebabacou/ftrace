@@ -42,3 +42,13 @@ void check_help_flag(const char *str);
  *
  */
 void display_help(void);
+
+
+/**
+ * @brief Split a string into an array of words.
+ *
+ * @param str The string to split.
+ * @param token The token to split the string with.
+ * @return char** The array of words.
+ */
+char **my_str_to_word_array(char const *str, char *token);
