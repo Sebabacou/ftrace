@@ -15,7 +15,7 @@
  * @param args Array of string containing
  * the command to trace and its arguments.
  */
-void run_ftrace(char **args);
+void run_ftrace(char *args);
 
 /**
  * @brief Find the symbol corresponding to the given address.
@@ -25,13 +25,3 @@ void run_ftrace(char **args);
  * @return true If the symbol is found.
  */
 bool find_symbol(char *filename, Elf64_Addr addr);
-
-/**
- * @brief Parse the /proc/pid/maps file.
- *
- * @param pid The pid of the process.
- * @param reg_offset The offset of the register.
- * @param argv The arguments of the program.
- * @return true If the parsing is successful.
- */
-int my_trace(char *argv[], int pid);
