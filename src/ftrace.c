@@ -5,6 +5,7 @@
 ** trace
 */
 
+#include "c_syscall.h"
 #include "ftrace.h"
 #include "utils.h"
 
@@ -29,7 +30,11 @@ static void trace(char **args, pid_t child_pid)
         pt_err = ptrace(PTRACE_GETREGS, child_pid, NULL, &regs);
         if (pt_err == -1)
             exit_error(UNDEF_ERR);
-        // Add logic here
+        if ((int) regs.orig_rax != -1) {
+            print_syscall(&regs);
+        } else {
+            fprintf(stderr, "ADD LOGIC HERE FOR NON SYSCALL FUNCTIONS\n");
+        }
         pt_err = ptrace(PTRACE_SINGLESTEP, child_pid, NULL, NULL);
         if (pt_err == -1)
             exit_error(UNDEF_ERR);

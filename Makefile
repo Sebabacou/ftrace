@@ -11,6 +11,7 @@ NAME		=	ftrace
 
 SRC			:= main.c
 SRC			+= ftrace.c
+SRC			+= c_syscall.c
 SRC			+= symbole_finder.c
 # Utils
 SRC			+= exit.c
