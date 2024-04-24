@@ -34,8 +34,6 @@ static void find_call_type(int pid, char *argv, struct user_regs_struct *regs)
         default:
             break;
         }
-    ptrace(PTRACE_SINGLESTEP, pid, NULL, NULL);
-    wait4(pid, &status, 0, NULL);
 }
 
 static void trace(char *args, pid_t child_pid)
