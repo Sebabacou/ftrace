@@ -8,6 +8,7 @@
 #include "c_syscall.h"
 #include "ftrace.h"
 #include "utils.h"
+#include "call_type.h"
 
 static void set_trace(char **args)
 {
@@ -20,7 +21,24 @@ static void set_trace(char **args)
         exit_error(UNDEF_ERR);
 }
 
-static void trace(char **args, pid_t child_pid)
+static void find_call_type(int pid, char *argv, struct user_regs_struct *regs)
+{
+    int status;
+    unsigned long instruction;
+
+    instruction = ptrace(PTRACE_PEEKTEXT, pid, regs->rip, NULL);
+    switch (instruction & 0xFF) {
+        case 0xe8:
+            e8_finder(instruction, pid, regs, argv);
+            break;
+        default:
+            break;
+        }
+    ptrace(PTRACE_SINGLESTEP, pid, NULL, NULL);
+    wait4(pid, &status, 0, NULL);
+}
+
+static void trace(char *args, pid_t child_pid)
 {
     struct user_regs_struct regs;
     int status;
@@ -33,7 +51,7 @@ static void trace(char **args, pid_t child_pid)
         if ((int) regs.orig_rax != -1) {
             print_syscall(&regs);
         } else {
-            fprintf(stderr, "ADD LOGIC HERE FOR NON SYSCALL FUNCTIONS\n");
+            find_call_type(child_pid, args, &regs);
         }
         pt_err = ptrace(PTRACE_SINGLESTEP, child_pid, NULL, NULL);
         if (pt_err == -1)
@@ -42,7 +60,7 @@ static void trace(char **args, pid_t child_pid)
     } while (!WIFEXITED(status));
 }
 
-void run_ftrace(char **args)
+void run_ftrace(char *args)
 {
     pid_t child_pid = fork();
     int status;
@@ -51,7 +69,7 @@ void run_ftrace(char **args)
     if (child_pid == -1)
         exit_error(UNDEF_ERR);
     if (child_pid == 0) {
-        set_trace(args);
+        set_trace(&args);
     } else {
         wait4(child_pid, &status, 0, NULL);
         pt_err = ptrace(PTRACE_SETOPTIONS, child_pid, NULL,

@@ -10,30 +10,12 @@
 #include "commons.h"
 
 /**
- * @brief Structure for the symbol finder.
- *
- * @param elf The elf file.
- * @param scn The section.
- * @param shdr The section header.
- * @param data The data.
- * @param sym The symbol.
- */
-
-typedef struct sym_finder_s {
-    Elf *elf;
-    Elf_Scn *scn;
-    GElf_Shdr shdr;
-    Elf_Data *data;
-    GElf_Sym sym;
-} sym_finder_t;
-
-/**
  * @brief Run the ftrace program.
  *
  * @param args Array of string containing
  * the command to trace and its arguments.
  */
-void run_ftrace(char **args);
+void run_ftrace(char *args);
 
 /**
  * @brief Find the symbol corresponding to the given address.
