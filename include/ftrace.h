@@ -15,7 +15,7 @@
  * @param args Array of string containing
  * the command to trace and its arguments.
  */
-void run_ftrace(char *args);
+void run_ftrace(char **args);
 
 /**
  * @brief Find the symbol corresponding to the given address.

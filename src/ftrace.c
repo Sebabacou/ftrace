@@ -58,7 +58,7 @@ static void trace(char *args, pid_t child_pid)
     } while (!WIFEXITED(status));
 }
 
-void run_ftrace(char *args)
+void run_ftrace(char **args)
 {
     pid_t child_pid = fork();
     int status;
@@ -67,13 +67,13 @@ void run_ftrace(char *args)
     if (child_pid == -1)
         exit_error(UNDEF_ERR);
     if (child_pid == 0) {
-        set_trace(&args);
+        set_trace(args);
     } else {
         wait4(child_pid, &status, 0, NULL);
         pt_err = ptrace(PTRACE_SETOPTIONS, child_pid, NULL,
             PTRACE_O_TRACEEXIT);
         if (pt_err == -1)
             exit_error(UNDEF_ERR);
-        trace(args, child_pid);
+        trace(args[0], child_pid);
     }
 }
