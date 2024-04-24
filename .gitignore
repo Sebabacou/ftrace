@@ -13,3 +13,5 @@ ftrace
 .idea
 .idea/*
 test
+tmp
+a.out

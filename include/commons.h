@@ -13,3 +13,11 @@
 #include <sys/ptrace.h>
 #include <unistd.h>
 #include <wait.h>
+#include <libelf.h>
+#include <gelf.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/user.h>
+#include <stdbool.h>
+
+typedef unsigned long long int ullong_t;
