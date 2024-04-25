@@ -33,6 +33,7 @@ static bool parse_proc_maps(int pid, long reg_offset, char *argv)
 {
     char path[256];
     FILE *maps_file;
+    bool found;
 
     sprintf(path, "/proc/%d/maps", pid);
     maps_file = fopen(path, "r");
@@ -40,9 +41,10 @@ static bool parse_proc_maps(int pid, long reg_offset, char *argv)
         perror("fopen");
         return false;
     }
-    if (loop_through_maps(pid, reg_offset, argv, maps_file) == false)
-        return false;
+    found = loop_through_maps(pid, reg_offset, argv, maps_file);
     fclose(maps_file);
+    if (found == false)
+        return false;
     return true;
 }
 
