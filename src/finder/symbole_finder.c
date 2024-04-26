@@ -6,7 +6,7 @@
 */
 
 #include "commons.h"
-
+#include "stack.h"
 
 bool checker(char *filename, Elf **elf)
 {
@@ -29,7 +29,7 @@ bool checker(char *filename, Elf **elf)
     return true;
 }
 
-bool loop_symbols(Elf *elf, Elf_Scn *scn, Elf64_Addr addr)
+bool loop_symbols(Elf *elf, Elf_Scn *scn, Elf64_Addr addr, fstack_t **stack)
 {
     GElf_Shdr shdr;
     Elf_Data *data;
@@ -45,15 +45,15 @@ bool loop_symbols(Elf *elf, Elf_Scn *scn, Elf64_Addr addr)
     for (i = 0; i < count; ++i) {
         gelf_getsym(data, i, &sym);
         if (sym.st_value == addr) {
-            dprintf(2, "Entering function %s at 0x%lx\n", elf_strptr(elf,
-                shdr.sh_link, sym.st_name), addr);
+            fstack_push(stack, elf_strptr(elf, shdr.sh_link, sym.st_name),
+                addr);
             return true;
         }
     }
     return false;
 }
 
-int find_symbol(char *filename, Elf64_Addr addr)
+int find_symbol(char *filename, Elf64_Addr addr, fstack_t **stack)
 {
     Elf *elf;
     Elf_Scn *scn = NULL;
@@ -61,7 +61,7 @@ int find_symbol(char *filename, Elf64_Addr addr)
     checker(filename, &elf);
     scn = elf_nextscn(elf, scn);
     while (scn != NULL) {
-        if (loop_symbols(elf, scn, addr))
+        if (loop_symbols(elf, scn, addr, stack))
             return true;
         scn = elf_nextscn(elf, scn);
     }
