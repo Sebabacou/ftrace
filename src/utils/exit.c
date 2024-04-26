@@ -13,5 +13,7 @@ void exit_error(int reason)
         fprintf(stderr, "An error occurred during execution.\n");
     if (reason == INV_ARG_NB)
         fprintf(stderr, "Missing argument.\n");
+    if (reason == MALLOC_ERR)
+        fprintf(stderr, "An error occurred during memory allocation.\n");
     exit(84);
 }

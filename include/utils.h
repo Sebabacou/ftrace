@@ -17,7 +17,8 @@
 #define UNDEF_ERR 0
 /* Invalid number of arguments passed to the program. */
 #define INV_ARG_NB 1
-
+/* Error during memory allocation. */
+#define MALLOC_ERR 2
 
 /**
  * @brief Exit the program with a `84` code an display an
