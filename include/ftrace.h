@@ -8,6 +8,7 @@
 #pragma once
 
 #include "commons.h"
+#include "stack.h"
 
 /**
  * @brief Run the ftrace program.
@@ -22,6 +23,7 @@ void run_ftrace(char **args);
  *
  * @param filename The filename of the elf file.
  * @param addr The address to find.
+ * @param stack The stack to fill.
  * @return true If the symbol is found.
  */
-bool find_symbol(char *filename, Elf64_Addr addr);
+bool find_symbol(char *filename, Elf64_Addr addr, fstack_t **stack);

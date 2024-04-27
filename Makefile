@@ -19,6 +19,8 @@ SRC			+= symbole_finder.c
 SRC			+= my_str_to_word_array.c
 SRC			+= exit.c
 SRC			+= help.c
+# TO MOVE
+SRC			+= stack.c
 
 VPATH		:=	src/
 VPATH		+=	src/finder/
