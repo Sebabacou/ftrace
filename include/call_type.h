@@ -33,3 +33,11 @@ typedef struct finder_s {
  * @return true if the call is found
  */
 bool e8_finder(finder_t *finder);
+
+/**
+ * @brief find the 9a call in the instruction
+ *
+ * @param finder structure with the instruction
+ * @return true if the call is found
+ */
+bool _9a_finder(finder_t *finder);
