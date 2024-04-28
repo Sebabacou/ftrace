@@ -51,7 +51,6 @@ static bool parse_proc_maps(finder_t *finder, long reg_offset)
 bool e8_finder(finder_t *finder)
 {
     long reg_offset;
-
     reg_offset = (int) finder->instruction >> 8;
     reg_offset = reg_offset + 4 + 1 + finder->regs->rip;
     return parse_proc_maps(finder, reg_offset);
