@@ -33,21 +33,29 @@ void signal_handler(int status, pid_t child_pid) {
     int stop_sig;
 
     if (WIFSIGNALED(status)) {
-        term_sig = WTERMSIG(status);
-        if (term_sig != SIGTRAP) {
-            fprintf(stderr, "Received signal %s\n", strsignal(term_sig));
-            exit(84);
-        }
+        stop_sig = WSTOPSIG(status);
+        if (stop_sig == SIGTRAP)
+            return;
+        if (stop_sig == SIGABRT || stop_sig == SIGFPE || stop_sig == SIGILL
+        || stop_sig == SIGINT || stop_sig == SIGSEGV || stop_sig == SIGQUIT
+        || stop_sig == SIGBUS || stop_sig == SIGQUIT || stop_sig == stop_sig 
+        || stop_sig == SIGXCPU || stop_sig == SIGXFSZ || stop_sig == SIGPIPE
+        || stop_sig == SIGTERM)
+            exit_program_sig(stop_sig);
+        else
+            print_sig(stop_sig);
     }
     if (WIFSTOPPED(status)) {
         stop_sig = WSTOPSIG(status);
         if (stop_sig == SIGTRAP)
             return;
-        if (stop_sig == SIGCONT || stop_sig == SIGWINCH || stop_sig == SIGCHLD
-        || stop_sig == SIGUSR1 || stop_sig == SIGUSR2 || stop_sig == SIGHUP ||
-        stop_sig == SIGALRM)
-            print_sig(stop_sig);
-        else
+        if (stop_sig == SIGABRT || stop_sig == SIGFPE || stop_sig == SIGILL
+        || stop_sig == SIGINT || stop_sig == SIGSEGV || stop_sig == SIGQUIT
+        || stop_sig == SIGBUS || stop_sig == SIGQUIT || stop_sig == stop_sig 
+        || stop_sig == SIGXCPU || stop_sig == SIGXFSZ || stop_sig == SIGPIPE
+        || stop_sig == SIGTERM)
             exit_program_sig(stop_sig);
-        }
+        else
+            print_sig(stop_sig);
+    }
 }
