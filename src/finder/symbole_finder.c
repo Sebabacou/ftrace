@@ -22,7 +22,6 @@ bool checker(char *filename, Elf **elf)
         return false;
     }
     *elf = elf_begin(fd, ELF_C_READ, NULL);
-    close(fd);
     if (*elf == NULL) {
         perror("elf_begin");
         return false;
