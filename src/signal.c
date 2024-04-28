@@ -37,7 +37,7 @@ void signal_handler(int status, pid_t child_pid) {
         if (stop_sig == SIGTRAP)
             return;
         if (stop_sig == SIGABRT || stop_sig == SIGFPE || stop_sig == SIGILL
-        || stop_sig == SIGINT || stop_sig == SIGSEGV || stop_sig == SIGQUIT
+        || stop_sig == SIGINT || stop_sig == SIGSEGV
         || stop_sig == SIGBUS || stop_sig == SIGQUIT || stop_sig == SIGSYS 
         || stop_sig == SIGXCPU || stop_sig == SIGXFSZ || stop_sig == SIGPIPE
         || stop_sig == SIGTERM)
@@ -52,7 +52,7 @@ void signal_handler(int status, pid_t child_pid) {
         if (stop_sig == SIGTRAP)
             return;
         if (stop_sig == SIGABRT || stop_sig == SIGFPE || stop_sig == SIGILL
-        || stop_sig == SIGINT || stop_sig == SIGSEGV || stop_sig == SIGQUIT
+        || stop_sig == SIGINT || stop_sig == SIGSEGV 
         || stop_sig == SIGBUS || stop_sig == SIGQUIT || stop_sig == SIGSYS 
         || stop_sig == SIGXCPU || stop_sig == SIGXFSZ || stop_sig == SIGPIPE
         || stop_sig == SIGTERM)
