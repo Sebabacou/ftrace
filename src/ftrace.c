@@ -9,6 +9,7 @@
 #include "ftrace.h"
 #include "utils.h"
 #include "call_type.h"
+#include "stack.h"
 
 static void set_trace(char **args)
 {
@@ -21,19 +22,22 @@ static void set_trace(char **args)
         exit_error(UNDEF_ERR);
 }
 
-static void find_call_type(int pid, char *argv, struct user_regs_struct *regs)
+static void find_call_type(int pid, char *argv, struct user_regs_struct
+    *regs, fstack_t **stack)
 {
-    int status;
-    unsigned long instruction;
+    finder_t finder = {0};
+    int opcode;
 
-    instruction = ptrace(PTRACE_PEEKTEXT, pid, regs->rip, NULL);
-    switch (instruction & 0xFF) {
-        case 0xe8:
-            e8_finder(instruction, pid, regs, argv);
-            break;
-        default:
-            break;
-        }
+    finder.pid = pid;
+    finder.regs = regs;
+    finder.argv = argv;
+    finder.stack = stack;
+    finder.instruction = ptrace(PTRACE_PEEKTEXT, pid, regs->rip, NULL);
+    opcode = finder.instruction & 0xFF;
+    if (opcode == 0xe8)
+        e8_finder(&finder);
+    else if (opcode == 0xc3 || opcode == 0xc2 || opcode == 0xc9)
+        fstack_pop(stack);
 }
 
 static void trace(char *args, pid_t child_pid)
@@ -41,6 +45,7 @@ static void trace(char *args, pid_t child_pid)
     struct user_regs_struct regs;
     int status;
     int pt_err;
+    fstack_t *stack = NULL;
 
     do {
         pt_err = ptrace(PTRACE_GETREGS, child_pid, NULL, &regs);
@@ -49,7 +54,7 @@ static void trace(char *args, pid_t child_pid)
         if ((int) regs.orig_rax != -1) {
             print_syscall(&regs);
         } else {
-            find_call_type(child_pid, args, &regs);
+            find_call_type(child_pid, args, &regs, &stack);
         }
         pt_err = ptrace(PTRACE_SINGLESTEP, child_pid, NULL, NULL);
         if (pt_err == -1)
@@ -58,7 +63,7 @@ static void trace(char *args, pid_t child_pid)
     } while (!WIFEXITED(status));
 }
 
-void run_ftrace(char *args)
+void run_ftrace(char **args)
 {
     pid_t child_pid = fork();
     int status;
@@ -67,13 +72,13 @@ void run_ftrace(char *args)
     if (child_pid == -1)
         exit_error(UNDEF_ERR);
     if (child_pid == 0) {
-        set_trace(&args);
+        set_trace(args);
     } else {
         wait4(child_pid, &status, 0, NULL);
         pt_err = ptrace(PTRACE_SETOPTIONS, child_pid, NULL,
             PTRACE_O_TRACEEXIT);
         if (pt_err == -1)
             exit_error(UNDEF_ERR);
-        trace(args, child_pid);
+        trace(args[0], child_pid);
     }
 }
