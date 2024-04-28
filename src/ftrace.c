@@ -59,6 +59,7 @@ static void trace(char *args, pid_t child_pid)
         pt_err = ptrace(PTRACE_SINGLESTEP, child_pid, NULL, NULL);
         if (pt_err == -1)
             exit_error(UNDEF_ERR);
+        signal_handler(status, child_pid);
         wait4(child_pid, &status, 0, NULL);
     } while (!WIFEXITED(status));
 }

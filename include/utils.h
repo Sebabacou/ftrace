@@ -53,3 +53,5 @@ void display_help(void);
  * @return char** The array of words.
  */
 char **my_str_to_word_array(char const *str, char *token);
+
+//void signal_handler(int status, pid_t child_pid);

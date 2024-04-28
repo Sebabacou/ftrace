@@ -15,6 +15,8 @@ SRC			+= c_syscall.c
 # Finder
 SRC			+= e8_finder.c
 SRC			+= symbole_finder.c
+# Signal
+SRC			+= signal.c
 # Utils
 SRC			+= my_str_to_word_array.c
 SRC			+= exit.c
