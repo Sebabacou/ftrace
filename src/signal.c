@@ -10,6 +10,7 @@
 #include "utils.h"
 #include "call_type.h"
 #include "stack.h"
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
@@ -17,47 +18,24 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void print_sig(int sig)
+void program_sig(int stop_sig)
 {
-    fprintf(stderr, "Received signal %s\n", strsignal(sig));
+    fprintf(stderr, "Received signal %s\n", strsignal(stop_sig));
+    if (stop_sig == SIGABRT || stop_sig == SIGFPE || stop_sig == SIGILL
+        || stop_sig == SIGINT || stop_sig == SIGSEGV || stop_sig == SIGQUIT
+        || stop_sig == SIGBUS || stop_sig == SIGXCPU || stop_sig == SIGXFSZ
+        || stop_sig == SIGPIPE || stop_sig == SIGTERM)
+        exit(84);
 }
 
-void exit_program_sig(int sig)
+void signal_handler(int status, pid_t child_pid)
 {
-    fprintf(stderr, "Received signal %s\n", strsignal(sig));
-    exit(84);
-}
-
-void signal_handler(int status, pid_t child_pid) {
-    int term_sig;
     int stop_sig;
 
-    if (WIFSIGNALED(status)) {
+    if (WIFSIGNALED(status) || WIFSTOPPED(status)) {
         stop_sig = WSTOPSIG(status);
         if (stop_sig == SIGTRAP)
             return;
-        if (stop_sig == SIGABRT || stop_sig == SIGFPE || stop_sig == SIGILL
-        || stop_sig == SIGINT || stop_sig == SIGSEGV
-        || stop_sig == SIGBUS || stop_sig == SIGQUIT || stop_sig == SIGSYS 
-        || stop_sig == SIGXCPU || stop_sig == SIGXFSZ || stop_sig == SIGPIPE
-        || stop_sig == SIGTERM)
-            exit_program_sig(stop_sig);
-        else {
-            print_sig(stop_sig);
-            return;
-        }
-    }
-    if (WIFSTOPPED(status)) {
-        stop_sig = WSTOPSIG(status);
-        if (stop_sig == SIGTRAP)
-            return;
-        if (stop_sig == SIGABRT || stop_sig == SIGFPE || stop_sig == SIGILL
-        || stop_sig == SIGINT || stop_sig == SIGSEGV 
-        || stop_sig == SIGBUS || stop_sig == SIGQUIT || stop_sig == SIGSYS 
-        || stop_sig == SIGXCPU || stop_sig == SIGXFSZ || stop_sig == SIGPIPE
-        || stop_sig == SIGTERM)
-            exit_program_sig(stop_sig);
-        else
-            print_sig(stop_sig);
+        program_sig(stop_sig);
     }
 }
