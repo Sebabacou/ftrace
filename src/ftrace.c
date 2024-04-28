@@ -39,7 +39,7 @@ static void find_call_type(int pid, char *argv, struct user_regs_struct
     if (opcode == 0xc3 || opcode == 0xc2 || opcode == 0xc9 || opcode == 0xcb)
         fstack_pop(stack);
     if (opcode == 0x9a)
-        _9a_finder(&finder);
+        finder_9a(&finder);
 }
 
 static void trace(char *args, pid_t child_pid)

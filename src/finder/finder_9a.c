@@ -9,7 +9,8 @@
 #include "utils.h"
 #include "call_type.h"
 
-static bool loop_through_maps_9a(long reg_offset, long segment, FILE *maps_file, finder_t *finder)
+static bool loop_through_maps_9a(long reg_offset, long segment, FILE
+    *maps_file, finder_t *finder)
 {
     char line[256];
     char **tab;
@@ -19,7 +20,8 @@ static bool loop_through_maps_9a(long reg_offset, long segment, FILE *maps_file,
     while (fgets(line, sizeof(line), maps_file) != NULL) {
         tab = my_str_to_word_array(line, " ");
         sscanf(tab[0], "%lx-%lx", &start, &end);
-        if (reg_offset >= start && reg_offset <= end && segment == strtol(tab[1], NULL, 16)) {
+        if (reg_offset >= start && reg_offset <= end && segment == strtol
+            (tab[1], NULL, 16)) {
             reg_offset = reg_offset - start + strtol(tab[2], NULL, 16);
             find_symbol(finder->argv, reg_offset, finder->stack);
             return true;
@@ -45,15 +47,13 @@ bool parse_proc_maps_9a(finder_t *finder, long reg_offset, long segment)
     return found;
 }
 
-bool _9a_finder(finder_t *finder)
+bool finder_9a(finder_t *finder)
 {
     long reg_offset;
     long segment;
 
     reg_offset = (int) (finder->instruction & 0xFFFF);
     segment = (int) ((finder->instruction >> 16) & 0xFFFF);
-
     reg_offset += segment << 4;
-
     return parse_proc_maps_9a(finder, reg_offset, segment);
 }

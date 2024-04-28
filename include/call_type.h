@@ -40,4 +40,4 @@ bool e8_finder(finder_t *finder);
  * @param finder structure with the instruction
  * @return true if the call is found
  */
-bool _9a_finder(finder_t *finder);
+bool finder_9a(finder_t *finder);

@@ -14,7 +14,7 @@ SRC			+= ftrace.c
 SRC			+= c_syscall.c
 # Finder
 SRC			+= e8_finder.c
-SRC			+= 9a_finder.c
+SRC			+= finder_9a.c
 SRC			+= symbole_finder.c
 # Utils
 SRC			+= my_str_to_word_array.c
