@@ -38,12 +38,14 @@ void signal_handler(int status, pid_t child_pid) {
             return;
         if (stop_sig == SIGABRT || stop_sig == SIGFPE || stop_sig == SIGILL
         || stop_sig == SIGINT || stop_sig == SIGSEGV || stop_sig == SIGQUIT
-        || stop_sig == SIGBUS || stop_sig == SIGQUIT || stop_sig == stop_sig 
+        || stop_sig == SIGBUS || stop_sig == SIGQUIT || stop_sig == SIGSYS 
         || stop_sig == SIGXCPU || stop_sig == SIGXFSZ || stop_sig == SIGPIPE
         || stop_sig == SIGTERM)
             exit_program_sig(stop_sig);
-        else
+        else {
             print_sig(stop_sig);
+            return;
+        }
     }
     if (WIFSTOPPED(status)) {
         stop_sig = WSTOPSIG(status);
@@ -51,7 +53,7 @@ void signal_handler(int status, pid_t child_pid) {
             return;
         if (stop_sig == SIGABRT || stop_sig == SIGFPE || stop_sig == SIGILL
         || stop_sig == SIGINT || stop_sig == SIGSEGV || stop_sig == SIGQUIT
-        || stop_sig == SIGBUS || stop_sig == SIGQUIT || stop_sig == stop_sig 
+        || stop_sig == SIGBUS || stop_sig == SIGQUIT || stop_sig == SIGSYS 
         || stop_sig == SIGXCPU || stop_sig == SIGXFSZ || stop_sig == SIGPIPE
         || stop_sig == SIGTERM)
             exit_program_sig(stop_sig);
